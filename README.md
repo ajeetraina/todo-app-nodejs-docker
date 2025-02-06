@@ -1,6 +1,20 @@
 # Todo App with Node.js and Docker
 
+![CI/CD](https://github.com/ajeetraina/todo-app-nodejs-docker/workflows/CI/CD/badge.svg)
+[![Backend Coverage](./backend/coverage/badge.svg)](./backend/coverage/lcov-report/index.html)
+[![Frontend Coverage](./frontend/coverage/badge.svg)](./frontend/coverage/lcov-report/index.html)
+
 A full-featured Todo List application built with Node.js, Express, and React, fully containerized with Docker.
+
+## Features
+
+- Create, Read, Update, and Delete todos
+- Mark todos as complete/incomplete
+- Filter todos by status
+- Containerized application with Docker
+- Comprehensive test coverage with Jest
+- OpenAPI documentation
+- GitHub Actions CI/CD pipeline
 
 ## Project Structure
 
@@ -17,6 +31,13 @@ todo-app-nodejs-docker/
 ├── docker-compose.yml      # Docker compose configuration
 └── README.md              # This file
 ```
+
+## API Documentation
+
+API documentation is available in OpenAPI format. You can view it by:
+
+1. Opening the `backend/openapi.yaml` file
+2. Using tools like Swagger UI to visualize the documentation
 
 ## Development Workflow
 
@@ -46,14 +67,6 @@ gitGraph
     checkout main
     merge develop tag: "v1.0.0"
 ```
-
-## Features
-
-- Create, Read, Update, and Delete todos
-- Mark todos as complete/incomplete
-- Filter todos by status
-- Containerized application with Docker
-- Comprehensive test coverage with Jest
 
 ## Getting Started
 
