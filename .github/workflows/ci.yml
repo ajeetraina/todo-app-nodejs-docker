@@ -29,7 +29,13 @@ jobs:
 
     - name: Run backend tests
       working-directory: ./backend
-      run: npm test
+      run: npm test -- --json --outputFile=test-results.json
+
+    - name: Generate backend coverage badges
+      working-directory: ./backend
+      run: |
+        npm install -g jest-coverage-badges
+        jest-coverage-badges
 
     - name: Install frontend dependencies
       working-directory: ./frontend
@@ -37,7 +43,21 @@ jobs:
 
     - name: Run frontend tests
       working-directory: ./frontend
-      run: npm test -- --watchAll=false
+      run: npm test -- --watchAll=false --json --outputFile=test-results.json
+
+    - name: Generate frontend coverage badges
+      working-directory: ./frontend
+      run: |
+        npm install -g jest-coverage-badges
+        jest-coverage-badges
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: |
+          backend/test-results.json
+          frontend/test-results.json
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v3
@@ -47,8 +67,35 @@ jobs:
           backend/coverage
           frontend/coverage
 
-  docker:
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          **/test-results.json
+
+  security:
     needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run npm audit
+      run: |
+        cd backend && npm audit --json > ../backend-audit.json || true
+        cd ../frontend && npm audit --json > ../frontend-audit.json || true
+
+    - name: Upload npm audit results
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-audit-results
+        path: |
+          backend-audit.json
+          frontend-audit.json
+
+  docker:
+    needs: [test, security]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
